@@ -1,8 +1,361 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Couleurs principales - Bleu médical apaisant */
+  --primary: #0077B6;         /* Bleu médical profond */
+  --primary-light: #00A8E8;   /* Bleu clair dynamique */
+  --primary-dark: #00527A;    /* Bleu foncé institutionnel */
+  --primary-darker: #003B5C;  /* Bleu très foncé pour le footer */
+
+  /* Couleurs secondaires - Vert santé et bien-être */
+  --secondary: #34A853;       /* Vert clinique et naturel */
+  --secondary-light: #6BCB77; /* Vert clair rafraîchissant */
+  --secondary-dark: #1E7A40;  /* Vert foncé rassurant */
+
+  /* Couleurs d'accentuation - Bleu ciel et sérénité */
+  --accent: #48CAE4;          /* Bleu clair moderne */
+  --accent-light: #ADE8F4;    /* Bleu pastel doux */
+  --accent-dark: #0096C7;     /* Bleu profond pour contrastes */
+
+  /* Couleurs de fond */
+  --background: #F8FAFC;      /* Fond clair épuré */
+  --background-alt: #E9F5FF;  /* Bleu très pâle apaisant */
+  --background-dark: #1A202C; /* Bleu nuit pour le mode sombre */
+
+  /* Couleurs de texte */
+  --text-primary: #2D3748;    /* Texte principal, gris bleu foncé */
+  --text-secondary: #4A5568;  /* Texte secondaire, gris modéré */
+  --text-light: #718096;      /* Texte adouci, pour descriptions */
+
+  /* Couleurs d'état */
+  --success: #31C48D;         /* Vert réussite et validation */
+  --warning: #F4A261;         /* Orange doux pour alertes */
+  --error: #E63946;           /* Rouge santé (urgent, erreurs) */
+  --info: #219EBC;            /* Bleu info et notifications */
+
+  /* Ombres */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.15);
+
+  /* Effets de flou */
+  --blur-sm: blur(3px);
+  --blur-md: blur(6px);
+  --blur-lg: blur(12px);
+
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 250ms ease-in-out;
+  --transition-slow: 400ms ease-in-out;
+
+  /* Bordures arrondies */
+  --border-radius-sm: 0.375rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 1rem;
+  --border-radius-full: 50%;
+}
+
+
+/* Classes utilitaires pour les dégradés */
+.gradient-primary {
+  background: linear-gradient(to right, var(--primary), var(--primary-light));
+}
+
+.gradient-secondary {
+  background: linear-gradient(to right, var(--secondary), var(--secondary-light));
+}
+
+.gradient-accent {
+  background: linear-gradient(to right, var(--accent), var(--accent-light));
+}
+
+/* Classes pour les effets de verre */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(43, 132, 234, 0.1);
+}
+
+.glass-dark {
+  background: rgba(26, 32, 44, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animations globales */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Styles de base */
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Cache les débordements sur le body */
+}
+
+/* Styles de texte */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Styles de boutons améliorés */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius-full);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, 
+    rgba(255, 255, 255, 0.1), 
+    rgba(255, 255, 255, 0.2)
+  );
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.btn:hover::before {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: white;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+  border: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: white;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+  border: none;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(5, 150, 105, 0.4);
+}
+
+.btn-outline {
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-3px);
+}
+
+/* Animation de pagination créative */
+@keyframes pageTransition {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.page-transition-enter {
+  animation: pageTransition 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pagination-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.pagination-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary);
+  opacity: 0.3;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.3s ease;
+}
+
+.pagination-dot.active {
+  background: var(--accent);
+  transform: scale(1.2);
+}
+
+.pagination-dot.active::before {
+  transform: translate(-50%, -50%) scale(1);
+  animation: pulseRing 2s infinite;
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: translate(-50%, -50%) scale(0.7);
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 0;
+  }
+}
+
+.pagination-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.pagination-arrow {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.pagination-arrow:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
+}
+
+.pagination-arrow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.4s ease-out;
+}
+
+.pagination-arrow:hover::after {
+  transform: translate(-50%, -50%) scale(2);
+}
+
+/* Amélioration des boutons de formulaire */
+input[type="submit"],
+button[type="submit"] {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: var(--border-radius-full);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 119, 182, 0.2);
+}
+
+input[type="submit"]:hover,
+button[type="submit"]:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 119, 182, 0.3);
+}
+
+input[type="submit"]::before,
+button[type="submit"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.7s ease;
+}
+
+input[type="submit"]:hover::before,
+button[type="submit"]:hover::before {
+  left: 100%;
+}
+
+/* Styles de cartes */
+.card {
+  @apply relative overflow-hidden rounded-xl transition-all duration-300;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-color: var(--primary);
 }
 
 @theme inline {
@@ -19,8 +372,328 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Amélioration du contraste pour le texte sur fond clair */
+.text-gradient {
+  background: linear-gradient(to right, var(--primary-dark), var(--secondary));
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hero-title {
+  color: var(--primary-dark);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stats-value {
+  color: var(--primary-dark);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Ajout d'un léger overlay pour améliorer la lisibilité */
+.hero-section::before {
+  display: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+@layer utilities {
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+  }
+}
+
+/* Ajoutez ces classes */
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Reset de base */
+html {
+  height: 100%;
+  overflow-y: scroll; /* Utiliser scroll au lieu de auto pour éviter les sauts lors des transitions de page */
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth; /* Défilement fluide pour les ancres */
+}
+
+/* Empêche les barres de défilement sur tous les conteneurs principaux */
+#__next, main, section, div {
+  overflow: hidden;
+}
+
+/* Structure principale - sans overflow-y visible */
+main {
+  flex: 1 0 auto;
+  position: relative;
+  padding-top: 4rem;
+  background: linear-gradient(to bottom, 
+    rgba(248, 250, 252, 0.95), 
+    rgba(237, 242, 247, 0.98)
+  );
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  will-change: transform, opacity;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Sections - sans overflow-y visible */
+.parallax-section {
+  padding: 4rem 0;
+  width: 100%;
+  position: relative;
+}
+
+/* Assure que les conteneurs interactifs sont cliquables */
+button, a, input, textarea, select, [role="button"] {
+  position: relative;
+  z-index: 1;
+}
+
+/* Style spécifique pour le Footer pour s'assurer qu'il s'affiche correctement */
+footer {
+  flex-shrink: 0;
+  position: relative;
+  width: 100%;
+  display: block;
+  margin-top: auto; /* Pousse le footer vers le bas */
+  background: linear-gradient(to bottom, var(--primary-dark), var(--primary-darker)); /* Assure que le footer a toujours une couleur de fond */
+}
+
+/* Section héro */
+.hero-section {
+  min-height: calc(100vh - 4rem);
+  width: 100%;
+  position: relative;
+  padding: 2rem 0;
+  margin: 0;
+  background: transparent;
+}
+
+/* Conteneur */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* Textes avec dégradés */
+.gradient-text {
+  background: linear-gradient(45deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Fond avec motif subtil */
+.bg-pattern {
+  background-image: radial-gradient(
+    circle at 2px 2px,
+    rgba(255, 255, 255, 0.1) 1px,
+    transparent 0
+  );
+  background-size: 20px 20px;
+}
+
+/* Sections avec profondeur */
+.depth-section {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.02)
+  );
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Classes utilitaires pour les dégradés */
+.from-primary-dark {
+  --tw-gradient-from: var(--primary-dark);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(0, 82, 122, 0));
+}
+
+.to-primary-darker {
+  --tw-gradient-to: var(--primary-darker);
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Gradient Text */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, var(--primary), var(--accent));
+}
+
+/* Card Hover Effects */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Video Background */
+.video-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* Loading Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Button Hover Effect */
+.button-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.button-hover::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  height: 300%;
+  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.6s ease-out;
+}
+
+.button-hover:hover::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Animations de transition de page */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
+    filter: blur(5px);
+  }
+}
+
+.page-transition-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  isolation: isolate;
+}
+
+.page-transition-enter {
+  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.page-transition-exit {
+  animation: fadeOut 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Overlay de transition */
+.page-transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  opacity: 0;
+  pointer-events: none;
+  z-index: 100;
+  transition: opacity 0.6s ease-in-out;
+}
+
+.page-transition-overlay.active {
+  opacity: 0.15;
 }

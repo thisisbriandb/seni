@@ -1,0 +1,32 @@
+{
+  "footer": {
+    "description": "SENI is your trusted partner for international medical support, facilitating access to quality healthcare for Central African patients.",
+    "rights": "All rights reserved",
+    "links": {
+      "company": {
+        "title": "Company",
+        "about": "About us",
+        "services": "Services",
+        "team": "Team",
+        "contact": "Contact"
+      },
+      "destinations": {
+        "title": "Destinations"
+      },
+      "legal": {
+        "title": "Legal",
+        "terms": "Terms & Conditions",
+        "privacy": "Privacy Policy",
+        "cookies": "Cookie Policy"
+      }
+    }
+  },
+  "hero": {
+    "badge": "International Medical Services",
+    "title": "Your gateway to quality healthcare",
+    "subtitle": "SENI facilitates access to the best medical care in Morocco, Tunisia and Senegal for Central African patients."
+  },
+  "services": {
+    "title": "Our Services"
+  }
+} 

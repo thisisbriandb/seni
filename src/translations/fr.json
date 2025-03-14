@@ -1,0 +1,32 @@
+{
+  "footer": {
+    "description": "SENI est votre partenaire de confiance pour l'accompagnement médical international, facilitant l'accès aux soins de qualité pour les patients centrafricains.",
+    "rights": "Tous droits réservés",
+    "links": {
+      "company": {
+        "title": "Entreprise",
+        "about": "À propos",
+        "services": "Services",
+        "team": "Équipe",
+        "contact": "Contact"
+      },
+      "destinations": {
+        "title": "Destinations"
+      },
+      "legal": {
+        "title": "Mentions légales",
+        "terms": "Conditions générales",
+        "privacy": "Politique de confidentialité",
+        "cookies": "Politique des cookies"
+      }
+    }
+  },
+  "hero": {
+    "badge": "Services médicaux internationaux",
+    "title": "Votre passerelle vers des soins médicaux de qualité",
+    "subtitle": "SENI facilite l'accès aux meilleurs soins médicaux au Maroc, en Tunisie et au Sénégal pour les patients centrafricains."
+  },
+  "services": {
+    "title": "Nos Services"
+  }
+} 
