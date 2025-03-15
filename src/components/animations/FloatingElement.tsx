@@ -1,42 +1,34 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+"use client";
+
+import { motion } from 'framer-motion';
+import { ReactNode } from 'react';
 
 interface FloatingElementProps {
-  children: React.ReactNode;
+  children: ReactNode;
   delay?: number;
-  offset?: number;
-  className?: string;
+  duration?: number;
+  distance?: number;
 }
 
 export default function FloatingElement({
   children,
   delay = 0,
-  offset = 20,
-  className = ''
+  duration = 3,
+  distance = 10
 }: FloatingElementProps) {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: offset }}
-      whileInView={{ 
-        opacity: 1, 
-        y: 0,
-        transition: {
-          duration: 0.8,
-          delay,
-          ease: [0.21, 0.45, 0.15, 1]
-        }
+      initial={{ y: 0 }}
+      animate={{
+        y: [0, -distance, 0],
       }}
-      style={{
-        scale: useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95])
+      transition={{
+        duration: duration,
+        repeat: Infinity,
+        repeatType: "reverse",
+        ease: "easeInOut",
+        delay: delay,
       }}
-      className={className}
     >
       {children}
     </motion.div>

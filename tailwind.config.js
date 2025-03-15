@@ -8,25 +8,26 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'primary': 'var(--primary)',
-        'primary-light': 'var(--primary-light)',
-        'primary-dark': 'var(--primary-dark)',
-        'secondary': 'var(--secondary)',
-        'secondary-light': 'var(--secondary-light)',
-        'secondary-dark': 'var(--secondary-dark)',
-        'accent': 'var(--accent)',
-        'accent-light': 'var(--accent-light)',
-        'accent-dark': 'var(--accent-dark)',
-        'text': {
-          primary: 'var(--text-primary)',
-          secondary: 'var(--text-secondary)',
-          light: 'var(--text-light)',
+        primary: {
+          DEFAULT: '#0077B6',
+          dark: '#00507A',
+          darker: '#001F3F',
+          light: '#90E0EF',
         },
-        'background': {
-          DEFAULT: 'var(--background)',
-          alt: 'var(--background-alt)',
-          dark: 'var(--background-dark)',
+        accent: {
+          DEFAULT: '#00A8E8',
+          dark: '#0096CC',
         },
+        secondary: {
+          DEFAULT: '#48CAE4',
+        },
+        text: {
+          primary: '#1A1A1A',
+          secondary: '#606060',
+        },
+      },
+      fontFamily: {
+        sans: ['var(--font-inter)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
     },
   },

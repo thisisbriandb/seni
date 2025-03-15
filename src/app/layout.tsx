@@ -1,12 +1,13 @@
 import "./globals.css";
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import { Suspense } from 'react';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import { Inter } from 'next/font/google';
 import RootClientWrapper from '@/components/layout/RootClientWrapper';
 import type { Metadata } from 'next';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 export const metadata: Metadata = {
   title: 'SENI | Votre passerelle médicale',
@@ -23,16 +24,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className={`${GeistSans.variable} ${GeistMono.variable} scroll-smooth`}>
+    <html lang="fr" className={`${inter.variable} scroll-smooth`}>
       <body className="flex flex-col min-h-screen bg-primary-darker overflow-x-hidden text-base antialiased">
         <RootClientWrapper>
-          <Header />
-          <Suspense fallback={<LoadingSpinner />}>
-            <main className="flex-grow w-full">
-              {children}
-            </main>
-          </Suspense>
-          <Footer />
+          {children}
         </RootClientWrapper>
       </body>
     </html>
