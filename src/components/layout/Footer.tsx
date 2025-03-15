@@ -73,8 +73,6 @@ export default function Footer() {
     }
   };
 
-  console.log("Footer rendering with language:", currentLang);
-
   return (
     <footer className="w-full pt-8 md:pt-16 pb-6 md:pb-16 relative text-white bg-primary-darker overflow-hidden mt-auto">
       {/* Fond avec dégradé */}
@@ -110,33 +108,33 @@ export default function Footer() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12 mb-8 md:mb-16"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-8 md:mb-16"
         >
           {/* Logo and description */}
-          <motion.div variants={itemVariants} className="space-y-4">
+          <motion.div variants={itemVariants} className="space-y-6">
             <Link href="/" className="inline-block">
               <Image 
                 src="/logo-white.svg" 
                 alt="SENI" 
-                width={100} 
-                height={35}
-                className="h-7 md:h-10 w-auto"
+                width={120} 
+                height={40}
+                className="h-8 md:h-10 w-auto"
               />
             </Link>
-            <div className="text-white/80 text-sm leading-relaxed max-w-xs">
+            <div className="text-white/80 text-base leading-relaxed max-w-xs">
               <LanguageTransition text="footer.description" lang={currentLang} />
             </div>
             
             {/* Contact info */}
-            <div className="space-y-2.5 md:space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {contactInfo.map((item, index) => (
                 <motion.div 
                   key={index}
-                  className="flex items-center gap-2 text-sm text-white/80 group"
+                  className="flex items-center gap-3 text-base text-white/80 group"
                   whileHover={{ x: 5 }}
                 >
-                  <div className="p-1.5 rounded-full bg-white/5 group-hover:bg-white/10">
-                    <Icon icon={item.icon} className="w-3.5 h-3.5 text-blue-400" />
+                  <div className="p-2 rounded-full bg-white/5 group-hover:bg-white/10">
+                    <Icon icon={item.icon} className="w-5 h-5 text-blue-400" />
                   </div>
                   <span className="group-hover:text-white transition-colors">{item.text}</span>
                 </motion.div>
@@ -146,8 +144,8 @@ export default function Footer() {
           
           {/* Links sections */}
           {footerLinks.map((section, index) => (
-            <motion.div key={index} variants={itemVariants} className="space-y-3 md:space-y-6">
-              <h3 className="font-semibold text-base relative">
+            <motion.div key={index} variants={itemVariants} className="space-y-4 md:space-y-6">
+              <h3 className="font-semibold text-lg relative">
                 <LanguageTransition text={section.title} lang={currentLang} />
                 <motion.div
                   className="absolute -bottom-1.5 left-0 h-0.5 bg-blue-400"
@@ -156,11 +154,11 @@ export default function Footer() {
                   viewport={{ once: true }}
                 />
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-2.5">
                 {section.links.map((link, linkIndex) => (
                   <motion.li key={linkIndex}>
                     <Link href={link.href}>
-                      <span className="text-white/70 hover:text-white text-sm inline-block py-1">
+                      <span className="text-white/70 hover:text-white text-base inline-block py-1">
                         {link.label.includes('footer') ? (
                           <LanguageTransition text={link.label} lang={currentLang} />
                         ) : (
@@ -177,16 +175,16 @@ export default function Footer() {
         
         {/* Separator */}
         <motion.div 
-          className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-4 md:my-8"
+          className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-6 md:my-8"
           initial={{ scaleX: 0, opacity: 0 }}
           whileInView={{ scaleX: 1, opacity: 1 }}
           viewport={{ once: true }}
         />
         
         {/* Footer bottom */}
-        <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-4 md:gap-6">
+        <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-6 md:gap-8">
           <motion.div 
-            className="text-sm text-white/60 text-center md:text-left"
+            className="text-base text-white/60 text-center md:text-left"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -196,7 +194,7 @@ export default function Footer() {
           
           {/* Social links */}
           <motion.div 
-            className="flex gap-3 md:gap-6"
+            className="flex gap-4 md:gap-6"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -211,8 +209,8 @@ export default function Footer() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <div className="p-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 transition-colors group-hover:bg-white/20">
-                  <Icon icon={social.icon} className="w-4 h-4 text-white" />
+                <div className="p-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 transition-colors group-hover:bg-white/20">
+                  <Icon icon={social.icon} className="w-5 h-5 text-white" />
                 </div>
               </motion.a>
             ))}

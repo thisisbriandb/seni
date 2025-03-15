@@ -63,14 +63,8 @@ export default function DestinationsPage() {
     <div className="min-h-screen bg-gradient-to-br from-[#001F3F] via-[#003366] to-[#004080]">
       {/* Hero Section */}
       <div className="relative h-[60vh] w-full overflow-hidden">
-        <div className="absolute inset-0 bg-black/50 z-10" />
-        <Image
-          src="/images/destinations/maroc.jpg"
-          alt="Destinations médicales"
-          fill
-          className="object-cover"
-          priority
-        />
+        {/* Remplacement de l'image par un dégradé */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#003366] via-[#004080] to-[#00509E] z-10" />
         <div className="relative z-20 container mx-auto h-full flex flex-col justify-center items-center text-white px-4">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -89,7 +83,7 @@ export default function DestinationsPage() {
           </motion.p>
         </div>
       </div>
-
+  
       {/* Destinations Grid */}
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

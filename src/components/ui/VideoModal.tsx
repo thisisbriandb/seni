@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@iconify/react';
+import { useEffect, useRef } from 'react';
 
 interface VideoModalProps {
   isOpen: boolean;
@@ -10,6 +11,21 @@ interface VideoModalProps {
 }
 
 export default function VideoModal({ isOpen, onClose, videoId }: VideoModalProps) {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Fonction pour démarrer la lecture de la vidéo
+  const playVideo = () => {
+    if (iframeRef.current) {
+      iframeRef.current.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      playVideo(); // Démarre la lecture lorsque la modal est ouverte
+    }
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -35,10 +51,12 @@ export default function VideoModal({ isOpen, onClose, videoId }: VideoModalProps
                 <Icon icon="carbon:close" className="w-6 h-6" />
               </button>
               <iframe
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; presentation"
+                ref={iframeRef}
+                src={`https://www.youtube.com/embed/${videoId}`} // Pas de autoplay ici
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
                 className="w-full h-full"
+                title="YouTube video player"
               />
             </div>
           </motion.div>

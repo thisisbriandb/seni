@@ -29,8 +29,8 @@ const locations: Location[] = [
   },
   {
     name: 'Casablanca',
-    lat: 45.5731,
-    lng: -7.5898,
+    lat: 33.5731, // Coordonnée corrigée
+    lng: -7.5898, // Coordonnée corrigée
     country: 'Maroc',
     size: 1.5,
     color: '#00A8E8',
@@ -38,8 +38,8 @@ const locations: Location[] = [
   },
   {
     name: 'Tunis',
-    lat: 40.8065,
-    lng: 10.1815,
+    lat: 36.8065, // Coordonnée corrigée
+    lng: 10.1815, // Coordonnée corrigée
     country: 'Tunisie',
     size: 1.5,
     color: '#00A8E8',
@@ -47,8 +47,8 @@ const locations: Location[] = [
   },
   {
     name: 'Dakar',
-    lat: 30.7167,
-    lng: -17.4677,
+    lat: 14.7167, // Coordonnée corrigée
+    lng: -17.4677, // Coordonnée corrigée
     country: 'Sénégal',
     size: 1.5,
     color: '#00A8E8',
@@ -56,9 +56,9 @@ const locations: Location[] = [
   },
   {
     name: 'Paris',
-    lat: 70.8566,
-    lng: 4.3522,
-    country: 'France',
+    lat: 70.8566, 
+    lng: 4.3522, 
+    country: '',
     size: 1.5,
     color: '#00A8E8',
     flag: '/flags/fr.svg'
