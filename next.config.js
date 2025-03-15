@@ -1,19 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Désactiver les traces pour éviter les problèmes de permission
-  tracing: {
-    ignoreRootModule: true
-  },
-  // Désactiver la télémétrie
-  telemetry: { 
-    disabled: true 
-  },
-  // Conserver les configurations existantes
+  // Options de configuration recommandées
   reactStrictMode: true,
-  swcMinify: true,
+  
+  // Configuration des images
   images: {
     domains: ['localhost'],
-    // Permet le chargement d'images depuis n'importe quelle source
     remotePatterns: [
       {
         protocol: 'https',
@@ -21,9 +13,14 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: []
-  }
+  
+  // Nouvelle syntaxe pour les packages externes de composants serveur
+  serverExternalPackages: [],
+  
+  // Désactivation de la télémétrie via l'environnement
+  env: {
+    NEXT_TELEMETRY_DISABLED: '1'
+  },
 };
 
 module.exports = nextConfig; 

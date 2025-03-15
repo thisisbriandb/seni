@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "vercel-build": "npm install three@0.174.0 @types/three@0.174.0 --save && next build"
   },
   "dependencies": {
     "@iconify/react": "^5.2.0",

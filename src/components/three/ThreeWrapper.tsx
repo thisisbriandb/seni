@@ -2,8 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 
 interface ThreeWrapperProps {
   children: React.ReactNode;
@@ -15,25 +13,34 @@ export default function ThreeWrapper({ children }: ThreeWrapperProps) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // Three.js initialization
+    // Initialisation basique sans post-processing
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     
     renderer.setSize(window.innerWidth, window.innerHeight);
-    mountRef.current?.appendChild(renderer.domElement);
-
-    // Post-processing
-    const composer = new EffectComposer(renderer);
-    const renderPass = new RenderPass(scene, camera);
-    composer.addPass(renderPass);
+    if (mountRef.current) {
+      mountRef.current.appendChild(renderer.domElement);
+    }
+    
+    camera.position.z = 5;
+    
+    // Animation loop simple
+    const animate = () => {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    };
+    
+    animate();
 
     // Cleanup
     return () => {
-      mountRef.current?.removeChild(renderer.domElement);
+      if (mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
       renderer.dispose();
     };
   }, []);
 
-  return <div ref={mountRef}>{children}</div>;
+  return <div ref={mountRef} className="fixed inset-0 -z-10">{children}</div>;
 } 
