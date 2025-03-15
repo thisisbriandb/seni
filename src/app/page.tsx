@@ -18,10 +18,6 @@ import Link from 'next/link';
 import { Icon } from '@iconify/react';
 import { destinations, hospitals } from './destinations/data';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
 
 const sampleServices: MedicalService[] = [
   {

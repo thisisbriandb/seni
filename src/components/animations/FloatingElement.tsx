@@ -4,33 +4,27 @@ import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 
 interface FloatingElementProps {
-  children: ReactNode;
+  children: React.ReactNode;
   delay?: number;
-  duration?: number;
-  distance?: number;
+  className?: string; // Add this line to accept className prop
 }
 
-export default function FloatingElement({
-  children,
-  delay = 0,
-  duration = 3,
-  distance = 10
-}: FloatingElementProps) {
+const FloatingElement: React.FC<FloatingElementProps> = ({ children, delay = 0, className = '' }) => {
   return (
     <motion.div
-      initial={{ y: 0 }}
-      animate={{
-        y: [0, -distance, 0],
-      }}
+      initial={{ y: 50, opacity: 0 }}
+      whileInView={{ y: 0, opacity: 1 }}
+      viewport={{ once: true }}
       transition={{
-        duration: duration,
-        repeat: Infinity,
-        repeatType: "reverse",
-        ease: "easeInOut",
+        type: "spring",
         delay: delay,
+        duration: 0.8
       }}
+      className={className} // Use the className prop
     >
       {children}
     </motion.div>
   );
-} 
+};
+
+export default FloatingElement;

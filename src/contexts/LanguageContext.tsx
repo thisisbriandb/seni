@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-type Language = 'fr' | 'en' | 'ar';
+export type Language = 'fr' | 'en' | 'ar';
 
 interface LanguageContextType {
   currentLang: Language;
@@ -141,4 +141,4 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
 export function useLanguage() {
   return useContext(LanguageContext);
-} 
+}

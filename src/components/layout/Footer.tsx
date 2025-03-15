@@ -44,8 +44,8 @@ const socialLinks = [
 
 const contactInfo = [
   { icon: "ri:map-pin-fill", text: 'Bangui, République Centrafricaine' },
-  { icon: "ri:phone-fill", text: '+236 72 00 00 00' },
-  { icon: "ri:mail-fill", text: 'contact@seni.cf' },
+  { icon: "ri:phone-fill", text: '+212 07 78 79 83 86' },
+  { icon: "ri:mail-fill", text: 'contactsenimaroc@gmail.com' },
 ];
 
 export default function Footer() {
@@ -76,7 +76,7 @@ export default function Footer() {
   console.log("Footer rendering with language:", currentLang);
 
   return (
-    <footer className="w-full pt-12 md:pt-16 pb-8 md:pb-16 relative text-white bg-primary-darker overflow-hidden mt-auto">
+    <footer className="w-full pt-8 md:pt-16 pb-6 md:pb-16 relative text-white bg-primary-darker overflow-hidden mt-auto">
       {/* Fond avec dégradé */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary-dark via-primary-darker to-primary-darker"></div>
       
@@ -110,75 +110,62 @@ export default function Footer() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-10 md:mb-16"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12 mb-8 md:mb-16"
         >
-          {/* Logo et description */}
-          <motion.div variants={itemVariants} className="space-y-4 md:space-y-6">
+          {/* Logo and description */}
+          <motion.div variants={itemVariants} className="space-y-4">
             <Link href="/" className="inline-block">
               <Image 
                 src="/logo-white.svg" 
                 alt="SENI" 
-                width={120} 
-                height={40}
-                className="h-8 md:h-10 w-auto"
+                width={100} 
+                height={35}
+                className="h-7 md:h-10 w-auto"
               />
             </Link>
-            <div className="text-white/80 text-xs md:text-sm leading-relaxed">
+            <div className="text-white/80 text-sm leading-relaxed max-w-xs">
               <LanguageTransition text="footer.description" lang={currentLang} />
             </div>
             
-            {/* Contact info avec animations au survol */}
-            <div className="space-y-3 md:space-y-4">
+            {/* Contact info */}
+            <div className="space-y-2.5 md:space-y-4">
               {contactInfo.map((item, index) => (
                 <motion.div 
                   key={index}
-                  className="flex items-center gap-2 md:gap-3 text-xs md:text-sm text-white/80 group cursor-pointer"
+                  className="flex items-center gap-2 text-sm text-white/80 group"
                   whileHover={{ x: 5 }}
                 >
-                  <motion.div
-                    whileHover={{ scale: 1.2, rotate: 360 }}
-                    transition={{ type: "spring", stiffness: 200 }}
-                    className="p-1.5 md:p-2 rounded-full bg-white/5 group-hover:bg-white/10"
-                  >
-                    <Icon icon={item.icon} className="w-3 h-3 md:w-4 md:h-4 text-blue-400" />
-                  </motion.div>
+                  <div className="p-1.5 rounded-full bg-white/5 group-hover:bg-white/10">
+                    <Icon icon={item.icon} className="w-3.5 h-3.5 text-blue-400" />
+                  </div>
                   <span className="group-hover:text-white transition-colors">{item.text}</span>
                 </motion.div>
               ))}
             </div>
           </motion.div>
           
-          {/* Liens avec effet de survol amélioré */}
+          {/* Links sections */}
           {footerLinks.map((section, index) => (
-            <motion.div key={index} variants={itemVariants} className="space-y-4 md:space-y-6">
-              <h3 className="font-semibold text-base md:text-lg relative">
+            <motion.div key={index} variants={itemVariants} className="space-y-3 md:space-y-6">
+              <h3 className="font-semibold text-base relative">
                 <LanguageTransition text={section.title} lang={currentLang} />
                 <motion.div
-                  className="absolute -bottom-2 left-0 h-0.5 bg-blue-400"
+                  className="absolute -bottom-1.5 left-0 h-0.5 bg-blue-400"
                   initial={{ width: 0 }}
                   whileInView={{ width: "2rem" }}
                   viewport={{ once: true }}
                 />
               </h3>
-              <ul className="space-y-2 md:space-y-3">
+              <ul className="space-y-2">
                 {section.links.map((link, linkIndex) => (
-                  <motion.li 
-                    key={linkIndex}
-                    whileHover={{ x: 5 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
+                  <motion.li key={linkIndex}>
                     <Link href={link.href}>
-                      <span className="text-white/70 hover:text-white text-xs md:text-sm inline-block relative group">
+                      <span className="text-white/70 hover:text-white text-sm inline-block py-1">
                         {link.label.includes('footer') ? (
                           <LanguageTransition text={link.label} lang={currentLang} />
                         ) : (
                           link.label
                         )}
-                        <motion.span
-                          className="absolute left-0 -bottom-0.5 w-0 h-px bg-blue-400 group-hover:w-full transition-all duration-300"
-                          initial={{ width: 0 }}
-                          whileHover={{ width: "100%" }}
-                        />
                       </span>
                     </Link>
                   </motion.li>
@@ -188,19 +175,18 @@ export default function Footer() {
           ))}
         </motion.div>
         
-        {/* Séparateur animé */}
+        {/* Separator */}
         <motion.div 
-          className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-6 md:my-8"
+          className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-4 md:my-8"
           initial={{ scaleX: 0, opacity: 0 }}
           whileInView={{ scaleX: 1, opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.5, ease: "easeInOut" }}
         />
         
-        {/* Bas de page avec animation des réseaux sociaux */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
+        {/* Footer bottom */}
+        <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-4 md:gap-6">
           <motion.div 
-            className="text-xs md:text-sm text-white/60 text-center md:text-left"
+            className="text-sm text-white/60 text-center md:text-left"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -208,9 +194,9 @@ export default function Footer() {
             © {new Date().getFullYear()} SENI. <LanguageTransition text="footer.rights" lang={currentLang} />
           </motion.div>
           
-          {/* Réseaux sociaux avec orbite */}
+          {/* Social links */}
           <motion.div 
-            className="flex gap-4 md:gap-6"
+            className="flex gap-3 md:gap-6"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -222,16 +208,11 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="relative group"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full opacity-0 group-hover:opacity-20 blur-xl"
-                  initial={{ scale: 0 }}
-                  whileHover={{ scale: 1.5 }}
-                />
-                <div className="relative p-1.5 md:p-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 transition-colors group-hover:bg-white/20">
-                  <Icon icon={social.icon} className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                <div className="p-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 transition-colors group-hover:bg-white/20">
+                  <Icon icon={social.icon} className="w-4 h-4 text-white" />
                 </div>
               </motion.a>
             ))}
@@ -240,4 +221,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-} 
+}

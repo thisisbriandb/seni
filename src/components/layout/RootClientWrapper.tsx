@@ -1,18 +1,19 @@
 "use client";
 
 import { LanguageProvider } from '@/contexts/LanguageContext';
-import ClientLayout from './ClientLayout';
+import Header from './Header';
+import Footer from './Footer';
 
-interface RootClientWrapperProps {
+export default function RootClientWrapper({
+  children,
+}: {
   children: React.ReactNode;
-}
-
-export default function RootClientWrapper({ children }: RootClientWrapperProps) {
+}) {
   return (
     <LanguageProvider>
-      <ClientLayout>
-        {children}
-      </ClientLayout>
+      <Header />
+      {children}
+      <Footer />
     </LanguageProvider>
   );
-} 
+}
