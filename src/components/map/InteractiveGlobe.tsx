@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import type { GlobeMethods } from 'react-globe.gl';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useOrientation } from '@/hooks/useOrientation';
 
@@ -83,9 +83,19 @@ export default function InteractiveGlobe() {
   const isTablet = useMediaQuery('(max-width: 1024px)');
   const orientation = useOrientation();
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Gestionnaire pour recalculer les dimensions basées sur le conteneur
+  // Données pour les labels des pays
+  const countries = [
+    { name: 'Central African Republic', lat: 6.6111, lng: 20.9394 },
+    { name: 'Morocco', lat: 31.7917, lng: -7.0926 },
+    { name: 'Tunisia', lat: 33.8869, lng: 9.5375 },
+    { name: 'Senegal', lat: 14.4974, lng: -14.4524 },
+    { name: 'France', lat: 46.2276, lng: 2.2137 },
+  ];
+
   useEffect(() => {
     const updateDimensions = () => {
       if (containerRef.current) {
@@ -94,11 +104,9 @@ export default function InteractiveGlobe() {
         
         if (isMobile) {
           if (orientation === 'landscape') {
-            // En paysage sur mobile, on limite la hauteur
             newHeight = Math.min(offsetHeight, 300);
             newWidth = offsetWidth;
           } else {
-            // En portrait sur mobile, on utilise une vue plus compacte
             newHeight = Math.min(offsetHeight, 350);
             newWidth = Math.min(offsetWidth, window.innerWidth * 0.95);
           }
@@ -106,7 +114,6 @@ export default function InteractiveGlobe() {
           newHeight = Math.min(offsetHeight, 450);
           newWidth = Math.min(offsetWidth, 600);
         } else {
-          // Taille standard pour desktop
           newHeight = Math.min(offsetHeight, 600);
           newWidth = Math.min(offsetWidth, 800);
         }
@@ -115,7 +122,6 @@ export default function InteractiveGlobe() {
       }
     };
 
-    // Mettre à jour au montage et lors des changements de taille/orientation
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
     
@@ -125,29 +131,45 @@ export default function InteractiveGlobe() {
   }, [isMobile, isTablet, orientation]);
 
   useEffect(() => {
+    let progressInterval: NodeJS.Timeout;
+    
+    if (isLoading) {
+      progressInterval = setInterval(() => {
+        setLoadingProgress(prev => {
+          const increment = Math.random() * 15;
+          const newProgress = Math.min(prev + increment, 90);
+          return newProgress;
+        });
+      }, 500);
+    }
+
+    return () => {
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
+    };
+  }, [isLoading]);
+
+  useEffect(() => {
     if (globeRef.current) {
-      // Configuration initiale du globe
       globeRef.current.controls().autoRotate = true;
       globeRef.current.controls().autoRotateSpeed = isMobile ? 0.5 : 0.3;
-      globeRef.current.controls().enableZoom = !isMobile; // Désactiver le zoom sur mobile pour éviter les problèmes de gestes
-      globeRef.current.controls().enablePan = !isMobile; // Désactiver le panoramique sur mobile
+      globeRef.current.controls().enableZoom = !isMobile;
+      globeRef.current.controls().enablePan = !isMobile;
       
-      // Ajustement pour le mobile
       const altitude = isMobile ? 
         (orientation === 'landscape' ? 2.3 : 2.5) : 
         (isTablet ? 2.3 : 2.2);
       
-      // Ajustement de la vue pour centrer l'Afrique
       globeRef.current.pointOfView(
         { 
-          lat: 15, // Centré sur l'Afrique
-          lng: 10, // Légèrement décalé pour voir l'Afrique
-          altitude: altitude // Vue plus éloignée pour voir l'ensemble
+          lat: 15,
+          lng: 10,
+          altitude: altitude
         }, 
         1000
       );
 
-      // Ajustement de la rotation initiale pour que l'Europe soit visible
       setTimeout(() => {
         if (globeRef.current) {
           globeRef.current.controls().autoRotate = false;
@@ -160,10 +182,11 @@ export default function InteractiveGlobe() {
             2000
           );
           
-          // Réactiver la rotation après le positionnement
           setTimeout(() => {
             if (globeRef.current) {
               globeRef.current.controls().autoRotate = true;
+              setLoadingProgress(100);
+              setTimeout(() => setIsLoading(false), 500);
             }
           }, 2500);
         }
@@ -177,7 +200,6 @@ export default function InteractiveGlobe() {
     setIsInitialView(false);
     
     if (globeRef.current) {
-      // Ajuster l'altitude en fonction du pays, de la taille d'écran et de l'orientation
       let zoomAltitude = isMobile ? 
         (orientation === 'landscape' ? 1.6 : 1.8) : 
         1.5;
@@ -225,6 +247,26 @@ export default function InteractiveGlobe() {
       ref={containerRef} 
       className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center"
     >
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm z-50"
+          >
+            <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-primary rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${loadingProgress}%` }}
+                transition={{ duration: 0.5 }}
+              />
+            </div>
+            <p className="mt-4 text-sm text-gray-600">Chargement du globe...</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <DynamicGlobe
         ref={globeRef}
         width={dimensions.width}
@@ -235,7 +277,7 @@ export default function InteractiveGlobe() {
         
         pointsData={locations}
         pointColor="color"
-        pointAltitude={0.05} // Réduit la hauteur des points pour qu'ils soient plus près de la surface
+        pointAltitude={0.05}
         pointRadius={d => isMobile ? (d as Location).size * 0.8 : (d as Location).size}
         pointLabel={d => `
           <div class="bg-white/90 backdrop-blur-md p-2 rounded-lg shadow-lg ${isMobile ? 'min-w-[100px]' : 'min-w-[120px]'}">
@@ -262,6 +304,15 @@ export default function InteractiveGlobe() {
         arcDashGap={0.1}
         arcDashAnimateTime={2000}
         arcStroke={isMobile ? 1 : 1.2}
+        
+        labelsData={countries}
+        labelLat={d => (d as any).lat}
+        labelLng={d => (d as any).lng}
+        labelText={d => (d as any).name}
+        labelSize={1.5}
+        labelDotRadius={0.5}
+        labelColor={() => 'rgba(255, 255, 255, 0.75)'}
+        labelResolution={2}
         
         atmosphereColor="rgba(0, 119, 182, 0.2)"
         atmosphereAltitude={0.15}
