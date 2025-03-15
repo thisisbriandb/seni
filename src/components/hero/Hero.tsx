@@ -7,14 +7,12 @@ import LanguageTransition from '../language/LanguageTransition';
 import InteractiveGlobe from '../map/InteractiveGlobe';
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
-import VideoModal from '../ui/VideoModal';
-import { useMediaQuery } from '@/hooks/useMediaQuery'; // Importez useMediaQuery
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 export default function Hero() {
   const { currentLang, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  const isMobile = useMediaQuery('(max-width: 768px)'); // Détecte les appareils mobiles
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   // Effet pour détecter le défilement
   useEffect(() => {
@@ -24,6 +22,9 @@ export default function Hero() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // URL de la vidéo YouTube
+  const videoUrl = "https://www.youtube.com/watch?v=pcev7-kVMGg";
 
   return (
     <>
@@ -38,11 +39,11 @@ export default function Hero() {
         <div className="relative z-10 container mx-auto min-h-screen flex flex-col lg:flex-row items-center justify-between px-4 md:px-6 lg:px-12">
           {/* Section texte */}
           <motion.div 
-            className="w-full lg:w-1/2 pt-20 md:pt-24 lg:pt-0 lg:pb-0 space-y-4 md:space-y-8 lg:pr-12"
+            className="w-full lg:w-1/2 pt-20 md:pt-24 lg:pt-0 lg:pb-0 space-y-4 md:space-y-6 lg:pr-12 text-center lg:text-left"
           >
             {/* Badge */}
             <motion.div 
-              className="inline-flex items-center px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-lg"
+              className="inline-flex items-center px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-lg mx-auto lg:mx-0"
             >
               <Icon icon="carbon:location-star-filled" className="w-4 h-4 md:w-5 md:h-5 text-blue-400 mr-2" />
               <span className="text-xs md:text-sm font-medium text-white">
@@ -52,39 +53,41 @@ export default function Hero() {
   
             {/* Titre principal */}
             <motion.h1 
-              className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-snug sm:leading-tight drop-shadow-2xl"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight sm:leading-tight drop-shadow-2xl mt-4 md:mt-6"
             >
               <LanguageTransition text="hero.title" lang={currentLang} />
             </motion.h1>
   
             {/* Description */}
             <motion.div 
-              className="prose prose-xs sm:prose-sm md:prose-lg text-white/90 max-w-xs md:max-w-xl drop-shadow-lg"
+              className="prose prose-sm md:prose-lg text-white/90 max-w-xs md:max-w-xl drop-shadow-lg mx-auto lg:mx-0 mt-4 md:mt-6"
             >
               <LanguageTransition text="hero.subtitle" lang={currentLang} />
             </motion.div>
   
             {/* Boutons d'action */}
             <motion.div
-              className="flex flex-wrap gap-y-3 gap-x-4 md:gap-4 pt-3 md:pt-6"
+              className="flex flex-wrap gap-3 md:gap-4 justify-center lg:justify-start mt-6 md:mt-8"
             >
               <Link href="/contact">
                 <motion.button
-                  className="flex items-center gap-2 px-4 py-2.5 md:px-6 md:py-3 text-sm md:text-base"
+                  className="flex items-center gap-2 px-4 py-2.5 md:px-6 md:py-3 text-sm md:text-base bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-white/20 transition-colors"
                 >
                   <Icon icon="carbon:email" className="w-4 h-4 md:w-5 md:h-5" />
                   <span>Nous contacter</span>
                 </motion.button>
               </Link>
-              <motion.button
-                onClick={() => setIsVideoModalOpen(true)}
+              <motion.a
+                href={videoUrl} // Redirection vers la vidéo YouTube
+                target="_blank" // Ouvre dans un nouvel onglet
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.02, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
                 whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-2 px-5 md:px-8 py-3 md:py-4 border-2 border-white/20 text-white rounded-full text-sm md:text-base font-semibold backdrop-blur-sm hover:border-white/40 transition-all duration-300"
+                className="flex items-center gap-2 px-5 md:px-8 py-3 md:py-4 border-2 border-white/20 text-white rounded-full text-sm md:text-base font-semibold backdrop-blur-sm hover:border-white/40 transition-all duration-300 cursor-pointer"
               >
                 <Icon icon="carbon:play-filled" className="w-4 h-4 md:w-5 md:h-5" />
                 <span>Voir la vidéo</span>
-              </motion.button>
+              </motion.a>
             </motion.div>
           </motion.div>
   
@@ -112,12 +115,6 @@ export default function Hero() {
           <Icon icon="carbon:chevron-down" className="w-5 h-5 md:w-6 md:h-6 animate-bounce" />
         </motion.div>
       </section>
-  
-      <VideoModal
-        isOpen={isVideoModalOpen}
-        onClose={() => setIsVideoModalOpen(false)}
-        videoId="pcev7-kVMGg"
-      />
     </>
   );
 }
