@@ -247,26 +247,36 @@ export default function InteractiveGlobe() {
       ref={containerRef} 
       className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center"
     >
-      <AnimatePresence>
-        {isLoading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm z-50"
-          >
-            <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
-              <motion.div
-                className="h-full bg-primary rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: `${loadingProgress}%` }}
-                transition={{ duration: 0.5 }}
-              />
-            </div>
-            <p className="mt-4 text-sm text-gray-600">Chargement du globe...</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <AnimatePresence>
+  {isLoading && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="absolute inset-0 flex flex-col items-center justify-center bg-[#001F3F]/90 backdrop-blur-sm z-50"
+    >
+      {/* Animation de chargement (spinner) */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+        className="w-12 h-12 rounded-full border-4 border-blue-400 border-t-transparent mb-4"
+      />
+
+      {/* Barre de progression */}
+      <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
+        <motion.div
+          className="h-full bg-blue-400 rounded-full"
+          initial={{ width: 0 }}
+          animate={{ width: `${loadingProgress}%` }}
+          transition={{ duration: 0.5 }}
+        />
+      </div>
+
+      {/* Message de chargement */}
+      <p className="mt-4 text-sm text-white/80">Chargement du globe...</p>
+    </motion.div>
+  )}
+</AnimatePresence>
       <DynamicGlobe
         ref={globeRef}
         width={dimensions.width}

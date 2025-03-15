@@ -91,20 +91,18 @@ export default function Hero() {
             </motion.div>
           </motion.div>
   
-          {/* Section Globe (masquée sur mobile) */}
-          {!isMobile && ( // Affiche InteractiveGlobe uniquement si ce n'est pas un mobile
-            <motion.div 
-              className="w-full lg:w-1/2 h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] relative mt-8 lg:mt-0"
-            >
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative w-[90%] sm:w-[95%] h-[90%] sm:h-[95%] rounded-full border border-white/10 p-1.5 sm:p-2">
-                  <div className="absolute inset-1.5 sm:inset-2">
-                    <InteractiveGlobe />
-                  </div>
+          {/* Section Globe (masquée sur mobile avec CSS) */}
+          <motion.div 
+            className="w-full lg:w-1/2 h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] relative mt-8 lg:mt-0 sm:hidden lg:block"
+          >
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative w-[90%] sm:w-[95%] h-[90%] sm:h-[95%] rounded-full border border-white/10 p-1.5 sm:p-2">
+                <div className="absolute inset-1.5 sm:inset-2">
+                  <InteractiveGlobe />
                 </div>
               </div>
-            </motion.div>
-          )}
+            </div>
+          </motion.div>
         </div>
   
         {/* Indicateur de défilement */}
