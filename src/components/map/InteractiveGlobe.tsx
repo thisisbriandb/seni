@@ -79,7 +79,7 @@ const countries = [
   { name: 'Morocco', lat: 31.7917, lng: -7.0926 },
   { name: 'Tunisia', lat: 33.8869, lng: 9.5375 },
   { name: 'Senegal', lat: 14.4974, lng: -14.4524 },
-  { name: 'France', lat: 46.2276, lng: 2.2137 },
+  { name: 'France', lat: 70.8566, lng: 4.3522 },
 ];
 
 const DynamicGlobe = dynamic(() => import('react-globe.gl'), { ssr: false });
