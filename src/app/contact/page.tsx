@@ -14,10 +14,15 @@ export default function ContactPage() {
     name: '',
     email: '',
     phone: '',
-    message: ''
+    message: '',
   });
+
+  const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,13 +38,36 @@ export default function ContactPage() {
       });
 
       if (!response.ok) throw new Error('Erreur lors de l\'envoi');
-      
+
       setSubmitStatus('success');
       setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (error) {
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setNewsletterSubmitting(true);
+    setNewsletterStatus('idle');
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail }),
+      });
+
+      if (!response.ok) throw new Error('Échec de l\'abonnement');
+
+      setNewsletterStatus('success');
+      setNewsletterEmail('');
+    } catch (error) {
+      setNewsletterStatus('error');
+    } finally {
+      setNewsletterSubmitting(false);
     }
   };
 
@@ -76,7 +104,7 @@ export default function ContactPage() {
                           type="text"
                           required
                           value={formData.name}
-                          onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                          onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                           className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                         />
                       </div>
@@ -89,7 +117,7 @@ export default function ContactPage() {
                           type="email"
                           required
                           value={formData.email}
-                          onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                          onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                           className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                         />
                       </div>
@@ -102,7 +130,7 @@ export default function ContactPage() {
                           type="tel"
                           required
                           value={formData.phone}
-                          onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                          onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
                           className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                         />
                       </div>
@@ -115,7 +143,7 @@ export default function ContactPage() {
                           required
                           rows={isMobile ? 3 : 4}
                           value={formData.message}
-                          onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                          onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
                           className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                         />
                       </div>
@@ -123,12 +151,13 @@ export default function ContactPage() {
                       <motion.button
                         type="submit"
                         disabled={isSubmitting}
-                        whileHover={{ scale: 1.02, boxShadow: "0 8px 30px rgba(0, 119, 182, 0.3)" }}
+                        whileHover={{ scale: 1.02, boxShadow: '0 8px 30px rgba(0, 119, 182, 0.3)' }}
                         whileTap={{ scale: 0.98 }}
                         className={`w-full py-2.5 sm:py-3 md:py-4 rounded-lg font-medium sm:font-semibold text-white text-sm sm:text-base relative overflow-hidden
-                          ${isSubmitting ? 
-                            'bg-gray-400 cursor-not-allowed' : 
-                            'bg-gradient-to-r from-[#2563eb] to-[#3b82f6] shadow-lg hover:shadow-xl'
+                          ${
+                            isSubmitting
+                              ? 'bg-gray-400 cursor-not-allowed'
+                              : 'bg-gradient-to-r from-[#2563eb] to-[#3b82f6] shadow-lg hover:shadow-xl'
                           }
                         `}
                       >
@@ -137,14 +166,14 @@ export default function ContactPage() {
                         </span>
                         <motion.div
                           className="absolute inset-0 bg-gradient-to-r from-[#1d4ed8] to-[#2563eb]"
-                          initial={{ x: "100%" }}
+                          initial={{ x: '100%' }}
                           whileHover={{ x: 0 }}
                           transition={{ duration: 0.3 }}
                         />
                       </motion.button>
 
                       {submitStatus === 'success' && (
-                        <motion.p 
+                        <motion.p
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="text-green-600 text-xs sm:text-sm text-center font-medium bg-green-50 p-2 sm:p-3 rounded-lg"
@@ -153,7 +182,7 @@ export default function ContactPage() {
                         </motion.p>
                       )}
                       {submitStatus === 'error' && (
-                        <motion.p 
+                        <motion.p
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="text-red-600 text-xs sm:text-sm text-center font-medium bg-red-50 p-2 sm:p-3 rounded-lg"
@@ -216,10 +245,83 @@ export default function ContactPage() {
                   </div>
                 </FloatingElement>
               </div>
+
+              {/* Section Newsletter */}
+              <FloatingElement delay={0.6}>
+                <div className="mt-12 sm:mt-16 md:mt-20 bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-6 md:p-8">
+                  <div className="max-w-2xl mx-auto text-center">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-dark mb-4">
+                      Restez informé
+                    </h2>
+                    <p className="text-sm sm:text-base text-text-secondary mb-6">
+                      Abonnez-vous à notre newsletter pour recevoir nos dernières actualités,
+                      offres exclusives et conseils utiles directement dans votre boîte mail.
+                    </p>
+
+                    <form
+                      onSubmit={handleNewsletterSubmit}
+                      className="flex flex-col sm:flex-row gap-4 justify-center items-stretch"
+                    >
+                      <input
+                        type="email"
+                        required
+                        value={newsletterEmail}
+                        onChange={(e) => setNewsletterEmail(e.target.value)}
+                        placeholder="Entrez votre adresse email"
+                        className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                      />
+
+                      <motion.button
+                        type="submit"
+                        disabled={newsletterSubmitting}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-8 py-3 bg-primary text-white rounded-lg font-medium text-sm sm:text-base hover:bg-primary-dark transition-colors shadow-md"
+                      >
+                        {newsletterSubmitting ? (
+                          <span className="flex items-center justify-center gap-2">
+                            <Icon icon="eos-icons:loading" className="text-lg" />
+                            Abonnement...
+                          </span>
+                        ) : (
+                          <span className="flex items-center justify-center gap-2">
+                            <Icon icon="ri:mail-send-line" className="text-lg" />
+                            S'abonner
+                          </span>
+                        )}
+                      </motion.button>
+                    </form>
+
+                    {newsletterStatus === 'success' && (
+                      <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-4 text-green-600 text-sm bg-green-50 p-3 rounded-lg"
+                      >
+                        Merci pour votre abonnement ! 🎉
+                      </motion.p>
+                    )}
+
+                    {newsletterStatus === 'error' && (
+                      <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-4 text-red-600 text-sm bg-red-50 p-3 rounded-lg"
+                      >
+                        Une erreur est survenue. Veuillez réessayer.
+                      </motion.p>
+                    )}
+
+                    <p className="mt-4 text-xs text-gray-500">
+                      Nous respectons votre vie privée. Aucun spam, jamais.
+                    </p>
+                  </div>
+                </div>
+              </FloatingElement>
             </div>
           </div>
         </ParallaxSection>
       </main>
     </MotionWrapper>
   );
-} 
+}

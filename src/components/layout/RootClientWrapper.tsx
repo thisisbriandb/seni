@@ -1,6 +1,7 @@
 "use client";
 
-import { LanguageProvider } from '@/contexts/LanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -9,11 +10,23 @@ export default function RootClientWrapper({
 }: {
   children: React.ReactNode;
 }) {
+  const { theme } = useTheme();
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
   return (
-    <LanguageProvider>
+    <>
       <Header />
-      {children}
+      <main className="flex-grow">
+        {children}
+      </main>
       <Footer />
-    </LanguageProvider>
+    </>
   );
 }

@@ -1,206 +1,197 @@
 "use client";
 
-import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import Link from 'next/link';
+import Image from 'next/image';
 import { Icon } from '@iconify/react';
-import LanguageSelector from './LanguageSelector';
+import { useTheme } from '@/contexts/ThemeContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const navItems = [
-  { name: 'Accueil', path: '/', icon: 'carbon:home' },
-  { name: 'Services', path: '/services', icon: 'carbon:service-desk' },
-  { name: 'Destinations', path: '/destinations', icon: 'carbon:location' },
-  { name: 'À Propos', path: '/about', icon: 'carbon:information' }
+  { name: 'Accueil', path: '/' },
+  { name: 'Services', path: '/services' },
+  { name: 'Destinations', path: '/destinations' },
+  { name: 'À Propos', path: '/about' }
 ];
 
-// Liste de langues pour l'affichage mobile
-const langOptions = ['fr', 'en', 'ar'] as const;
-type LangCode = typeof langOptions[number];
-
 export default function Header() {
-  const { currentLang, setLanguage, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <>
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled 
-            ? 'bg-[#001F3F]/95 backdrop-blur-md shadow-2xl border-b border-white/10 py-2 md:py-4' 
-            : 'bg-gradient-to-b from-black/50 to-transparent py-3 md:py-6'
-        }`}
-      >
-        <div className="container mx-auto px-4 md:px-6">
-          <nav className="flex items-center justify-between">
-            {/* Logo */}
-            <Link href="/">
-              <motion.div 
-                className="relative z-50"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+    <header 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-sm py-4' : 'bg-transparent py-6'
+      }`}
+    >
+      <div className="container mx-auto px-4 lg:px-8">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="relative flex items-center">
+            <Image
+              src="/logo.png"
+              alt="SENI"
+              width={120}
+              height={48}
+              className="h-8 sm:h-10 w-auto object-contain transition-transform hover:scale-105"
+              priority
+              quality={100}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent dark:from-gray-900/10 mix-blend-overlay" />
+          </Link>
+
+          {/* Navigation desktop */}
+          <nav className="hidden md:flex items-center gap-8">
+            {navItems.map((item) => (
+              <Link 
+                key={item.name} 
+                href={item.path}
+                className="text-sm text-gray-600 dark:text-gray-300 hover:text-[#0D7490] dark:hover:text-[#3CC7EE] transition-colors"
               >
-                <span className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">
-                  SENI
-                </span>
-              </motion.div>
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Actions */}
+          <div className="hidden md:flex items-center gap-6">
+            {/* Theme Toggle */}
+            <motion.button
+              onClick={toggleTheme}
+              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <AnimatePresence mode="wait">
+                {theme === 'dark' ? (
+                  <motion.div
+                    key="dark"
+                    initial={{ opacity: 0, rotate: -180 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: 180 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Icon icon="ri:sun-fill" className="w-5 h-5 text-yellow-500" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="light"
+                    initial={{ opacity: 0, rotate: 180 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: -180 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Icon icon="ri:moon-fill" className="w-5 h-5 text-gray-600" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
+
+            {/* Join Us Button */}
+            <Link
+              href="/join-us"
+              className="px-5 py-2.5 bg-primary/10 text-primary dark:text-primary/80 text-sm rounded-full hover:bg-primary/20 transition-all flex items-center gap-2 group"
+            >
+              <Icon icon="ri:team-line" className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <span>Nous rejoindre</span>
             </Link>
 
-            {/* Navigation desktop */}
-            <div className="hidden lg:flex items-center gap-8">
-              {navItems.map((item) => (
-                <Link key={item.name} href={item.path}>
-                  <motion.div
-                    className="relative group"
-                    whileHover={{ y: -2 }}
-                  >
-                    <span className="flex items-center gap-2 text-white group-hover:text-blue-400 transition-colors drop-shadow-lg">
-                      <Icon icon={item.icon} className="w-5 h-5" />
-                      <span className="font-medium">{item.name}</span>
-                    </span>
-                    <motion.div
-                      className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300"
-                      whileHover={{ width: "100%" }}
-                    />
-                  </motion.div>
-                </Link>
-              ))}
-            </div>
+            <Link 
+              href="/contact"
+              className="px-5 py-2 bg-[#0D7490] dark:bg-[#3CC7EE] text-white text-sm rounded-full hover:bg-[#0D7490]/90 dark:hover:bg-[#3CC7EE]/90 transition-all"
+            >
+              Contact
+            </Link>
+          </div>
 
-            {/* Actions */}
-            <div className="hidden lg:flex items-center gap-6">
-              <LanguageSelector />
-
-              {/* Bouton Contact */}
-              <Link href="/contact">
-                <motion.button
-                  whileHover={{ scale: 1.05, backgroundColor: '#fff' }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-6 py-2.5 bg-white text-[#001F3F] rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  <Icon icon="carbon:email" className="w-5 h-5" />
-                  <span>Contact</span>
-                </motion.button>
-              </Link>
+          {/* Menu mobile */}
+          <button
+            className="md:hidden p-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Menu"
+          >
+            <div className="w-6 h-5 flex flex-col justify-between">
+              <span className={`w-full h-0.5 bg-gray-600 dark:bg-gray-300 transition-all ${
+                mobileMenuOpen ? 'rotate-45 translate-y-2' : ''
+              }`} />
+              <span className={`w-full h-0.5 bg-gray-600 dark:bg-gray-300 transition-all ${
+                mobileMenuOpen ? 'opacity-0' : ''
+              }`} />
+              <span className={`w-full h-0.5 bg-gray-600 dark:bg-gray-300 transition-all ${
+                mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
+              }`} />
             </div>
-
-            {/* Bouton menu mobile et LanguageSelector sur mobile*/}
-            <div className="lg:hidden flex items-center gap-3">
-              <LanguageSelector />
-              
-              <motion.button
-                className="relative z-50 p-2"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                whileTap={{ scale: 0.9 }}
-              >
-                <div className="w-5 h-5 md:w-6 md:h-6 flex flex-col justify-center items-center">
-                  <motion.span
-                    animate={mobileMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-                    className="w-5 md:w-6 h-0.5 bg-white mb-1.5 transform origin-center transition-transform shadow-lg"
-                  />
-                  <motion.span
-                    animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
-                    className="w-5 md:w-6 h-0.5 bg-white mb-1.5 shadow-lg"
-                  />
-                  <motion.span
-                    animate={mobileMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-                    className="w-5 md:w-6 h-0.5 bg-white transform origin-center transition-transform shadow-lg"
-                  />
-                </div>
-              </motion.button>
-            </div>
-          </nav>
+          </button>
         </div>
-      </motion.header>
+      </div>
 
       {/* Menu mobile */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed inset-0 bg-[#001F3F]/98 backdrop-blur-lg z-40 lg:hidden pt-16 overflow-y-auto"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="absolute top-full left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 shadow-sm md:hidden overflow-hidden"
           >
-            <div className="container mx-auto px-4 md:px-6 py-8 md:py-12">
-              <div className="flex flex-col gap-4 md:gap-6">
-                {navItems.map((item, index) => (
-                  <motion.div
+            <div className="container mx-auto px-4 py-4">
+              <nav className="flex flex-col gap-4">
+                {navItems.map((item) => (
+                  <Link
                     key={item.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
+                    href={item.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-gray-600 dark:text-gray-300 hover:text-[#0D7490] dark:hover:text-[#3CC7EE] py-2 transition-colors"
                   >
-                    <Link
-                      href={item.path}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 text-white hover:text-blue-400 text-xl md:text-2xl font-medium"
-                    >
-                      <Icon icon={item.icon} className="w-5 h-5 md:w-6 md:h-6" />
-                      <span>{item.name}</span>
-                    </Link>
-                  </motion.div>
+                    {item.name}
+                  </Link>
                 ))}
-              </div>
+                <div className="pt-4 flex flex-col gap-4">
+                  {/* Theme Toggle Mobile */}
+                  <button
+                    onClick={() => {
+                      toggleTheme();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex items-center justify-center gap-2 py-2 px-4 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-600 dark:text-gray-300"
+                  >
+                    <Icon 
+                      icon={theme === 'dark' ? "ri:sun-fill" : "ri:moon-fill"} 
+                      className={`w-5 h-5 ${theme === 'dark' ? 'text-yellow-500' : 'text-gray-600'}`}
+                    />
+                    <span>{theme === 'dark' ? 'Mode clair' : 'Mode sombre'}</span>
+                  </button>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="mt-8 md:mt-12"
-              >
-                <h3 className="text-white text-sm font-medium uppercase tracking-wider mb-3 md:mb-4">
-                  Langues
-                </h3>
-                <div className="grid grid-cols-3 gap-3 md:gap-4">
-                  {langOptions.map((langCode) => (
-                    <button
-                      key={langCode}
-                      onClick={() => setLanguage(langCode)}
-                      className={`py-2 md:py-3 rounded-xl text-center font-medium transition-all ${
-                        currentLang === langCode 
-                          ? 'bg-white text-[#001F3F] shadow-lg'
-                          : 'bg-white/10 text-white hover:bg-white/20'
-                      }`}
-                    >
-                      <span>{langCode.toUpperCase()}</span>
-                    </button>
-                  ))}
+                  {/* Join Us Button Mobile */}
+                  <Link
+                    href="/join-us"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-2 py-2 px-4 bg-primary/10 text-primary dark:text-primary/80 rounded-full hover:bg-primary/20 transition-all"
+                  >
+                    <Icon icon="ri:team-line" className="w-5 h-5" />
+                    <span>Nous rejoindre</span>
+                  </Link>
+
+                  <Link
+                    href="/contact"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="bg-[#0D7490] dark:bg-[#3CC7EE] text-white text-center py-2 rounded-full hover:bg-[#0D7490]/90 dark:hover:bg-[#3CC7EE]/90 transition-all"
+                  >
+                    Contact
+                  </Link>
                 </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="mt-8 md:mt-12"
-              >
-                <Link
-                  href="/contact"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-3 w-full py-3 md:py-4 bg-white text-[#001F3F] rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  <Icon icon="carbon:email" className="w-5 h-5 md:w-6 md:h-6" />
-                  <span>Nous contacter</span>
-                </Link>
-              </motion.div>
+              </nav>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </header>
   );
 } 

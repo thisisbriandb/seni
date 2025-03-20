@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import type { GlobeMethods } from 'react-globe.gl';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useOrientation } from '@/hooks/useOrientation';
+import { debounce } from 'lodash';
 
 interface Location {
   name: string;
@@ -29,8 +30,8 @@ const locations: Location[] = [
   },
   {
     name: 'Casablanca',
-    lat: 33.5731, // Coordonnée corrigée
-    lng: -7.5898, // Coordonnée corrigée
+    lat: 33.5731,
+    lng: -7.5898,
     country: 'Maroc',
     size: 1.5,
     color: '#00A8E8',
@@ -38,8 +39,8 @@ const locations: Location[] = [
   },
   {
     name: 'Tunis',
-    lat: 36.8065, // Coordonnée corrigée
-    lng: 10.1815, // Coordonnée corrigée
+    lat: 36.8065,
+    lng: 10.1815,
     country: 'Tunisie',
     size: 1.5,
     color: '#00A8E8',
@@ -47,8 +48,8 @@ const locations: Location[] = [
   },
   {
     name: 'Dakar',
-    lat: 14.7167, // Coordonnée corrigée
-    lng: -17.4677, // Coordonnée corrigée
+    lat: 14.7167,
+    lng: -17.4677,
     country: 'Sénégal',
     size: 1.5,
     color: '#00A8E8',
@@ -56,9 +57,9 @@ const locations: Location[] = [
   },
   {
     name: 'Paris',
-    lat: 70.8566, 
-    lng: 4.3522, 
-    country: '',
+    lat: 70.8566,
+    lng: 4.3522,
+    country: 'France',
     size: 1.5,
     color: '#00A8E8',
     flag: '/flags/fr.svg'
@@ -73,6 +74,14 @@ const arcs = locations.slice(1).map(dest => ({
   color: 'rgba(0, 119, 182, 0.8)',
 }));
 
+const countries = [
+  { name: 'Central African Republic', lat: 6.6111, lng: 20.9394 },
+  { name: 'Morocco', lat: 31.7917, lng: -7.0926 },
+  { name: 'Tunisia', lat: 33.8869, lng: 9.5375 },
+  { name: 'Senegal', lat: 14.4974, lng: -14.4524 },
+  { name: 'France', lat: 46.2276, lng: 2.2137 },
+];
+
 const DynamicGlobe = dynamic(() => import('react-globe.gl'), { ssr: false });
 
 export default function InteractiveGlobe() {
@@ -84,20 +93,15 @@ export default function InteractiveGlobe() {
   const orientation = useOrientation();
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const [isLoading, setIsLoading] = useState(true);
-  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [globeIsReady, setGlobeIsReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Données pour les labels des pays
-  const countries = [
-    { name: 'Central African Republic', lat: 6.6111, lng: 20.9394 },
-    { name: 'Morocco', lat: 31.7917, lng: -7.0926 },
-    { name: 'Tunisia', lat: 33.8869, lng: 9.5375 },
-    { name: 'Senegal', lat: 14.4974, lng: -14.4524 },
-    { name: 'France', lat: 46.2276, lng: 2.2137 },
-  ];
+  const memoizedLocations = useMemo(() => locations, []);
+  const memoizedArcs = useMemo(() => arcs, []);
+  const memoizedCountries = useMemo(() => countries, []);
 
-  useEffect(() => {
-    const updateDimensions = () => {
+  const updateDimensions = useMemo(() => {
+    return debounce(() => {
       if (containerRef.current) {
         const { offsetWidth, offsetHeight } = containerRef.current;
         let newWidth, newHeight;
@@ -120,38 +124,24 @@ export default function InteractiveGlobe() {
         
         setDimensions({ width: newWidth, height: newHeight });
       }
-    };
-
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    
-    return () => {
-      window.removeEventListener('resize', updateDimensions);
-    };
+    }, 100);
   }, [isMobile, isTablet, orientation]);
 
   useEffect(() => {
-    let progressInterval: NodeJS.Timeout;
-    
-    if (isLoading) {
-      progressInterval = setInterval(() => {
-        setLoadingProgress(prev => {
-          const increment = Math.random() * 15;
-          const newProgress = Math.min(prev + increment, 90);
-          return newProgress;
-        });
-      }, 500);
-    }
-
-    return () => {
-      if (progressInterval) {
-        clearInterval(progressInterval);
-      }
-    };
-  }, [isLoading]);
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, [updateDimensions]);
 
   useEffect(() => {
-    if (globeRef.current) {
+    if (globeIsReady) {
+      const timeout = setTimeout(() => setIsLoading(false), 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [globeIsReady]);
+
+  useEffect(() => {
+    if (globeRef.current && globeIsReady) {
       globeRef.current.controls().autoRotate = true;
       globeRef.current.controls().autoRotateSpeed = isMobile ? 0.5 : 0.3;
       globeRef.current.controls().enableZoom = !isMobile;
@@ -161,38 +151,22 @@ export default function InteractiveGlobe() {
         (orientation === 'landscape' ? 2.3 : 2.5) : 
         (isTablet ? 2.3 : 2.2);
       
-      globeRef.current.pointOfView(
-        { 
-          lat: 15,
-          lng: 10,
-          altitude: altitude
-        }, 
-        1000
-      );
+      globeRef.current.pointOfView({ lat: 15, lng: 10, altitude }, 1000);
 
       setTimeout(() => {
         if (globeRef.current) {
           globeRef.current.controls().autoRotate = false;
-          globeRef.current.pointOfView(
-            { 
-              lat: 25, 
-              lng: 10, 
-              altitude: altitude
-            }, 
-            2000
-          );
+          globeRef.current.pointOfView({ lat: 25, lng: 10, altitude }, 2000);
           
           setTimeout(() => {
             if (globeRef.current) {
               globeRef.current.controls().autoRotate = true;
-              setLoadingProgress(100);
-              setTimeout(() => setIsLoading(false), 500);
             }
           }, 2500);
         }
       }, 1000);
     }
-  }, [isMobile, isTablet, orientation, dimensions]);
+  }, [globeIsReady, isMobile, isTablet, orientation, dimensions]);
 
   const handleLocationClick = (point: object, event: MouseEvent, coords: { lat: number; lng: number; altitude: number }) => {
     const location = point as Location;
@@ -212,14 +186,7 @@ export default function InteractiveGlobe() {
         (orientation === 'landscape' ? 1.4 : 1.6) : 
         1.3;
       
-      globeRef.current.pointOfView(
-        { 
-          lat: location.lat, 
-          lng: location.lng, 
-          altitude: zoomAltitude
-        }, 
-        1000
-      );
+      globeRef.current.pointOfView({ lat: location.lat, lng: location.lng, altitude: zoomAltitude }, 1000);
     }
   };
 
@@ -229,14 +196,7 @@ export default function InteractiveGlobe() {
         (orientation === 'landscape' ? 2.3 : 2.5) : 
         (isTablet ? 2.3 : 2.2);
         
-      globeRef.current.pointOfView(
-        { 
-          lat: 25, 
-          lng: 10, 
-          altitude: altitude
-        }, 
-        1000
-      );
+      globeRef.current.pointOfView({ lat: 25, lng: 10, altitude }, 1000);
       setActiveLocation(null);
       setIsInitialView(true);
     }
@@ -247,45 +207,33 @@ export default function InteractiveGlobe() {
       ref={containerRef} 
       className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center"
     >
-    <AnimatePresence>
-  {isLoading && (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="absolute inset-0 flex flex-col items-center justify-center bg-[#001F3F]/90 backdrop-blur-sm z-50"
-    >
-      {/* Animation de chargement (spinner) */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-        className="w-12 h-12 rounded-full border-4 border-blue-400 border-t-transparent mb-4"
-      />
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 flex flex-col items-center justify-center bg-[#001F3F]/90 backdrop-blur-sm z-50"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="w-12 h-12 rounded-full border-4 border-blue-400 border-t-transparent mb-4"
+            />
+            <p className="mt-4 text-sm text-white/80">Chargement du globe...</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Barre de progression */}
-      <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
-        <motion.div
-          className="h-full bg-blue-400 rounded-full"
-          initial={{ width: 0 }}
-          animate={{ width: `${loadingProgress}%` }}
-          transition={{ duration: 0.5 }}
-        />
-      </div>
-
-      {/* Message de chargement */}
-      <p className="mt-4 text-sm text-white/80">Chargement du globe...</p>
-    </motion.div>
-  )}
-</AnimatePresence>
       <DynamicGlobe
         ref={globeRef}
+        onGlobeReady={() => setGlobeIsReady(true)}
         width={dimensions.width}
         height={dimensions.height}
         globeImageUrl="/images/earth-blue-marble.jpg"
         bumpImageUrl="/images/earth-topology.png"
         backgroundImageUrl="/images/night-sky.png"
-        
-        pointsData={locations}
+        pointsData={memoizedLocations}
         pointColor="color"
         pointAltitude={0.05}
         pointRadius={d => isMobile ? (d as Location).size * 0.8 : (d as Location).size}
@@ -307,15 +255,13 @@ export default function InteractiveGlobe() {
           </div>
         `}
         onPointClick={handleLocationClick}
-        
-        arcsData={arcs}
+        arcsData={memoizedArcs}
         arcColor="color"
         arcDashLength={0.5}
         arcDashGap={0.1}
         arcDashAnimateTime={2000}
         arcStroke={isMobile ? 1 : 1.2}
-        
-        labelsData={countries}
+        labelsData={memoizedCountries}
         labelLat={d => (d as any).lat}
         labelLng={d => (d as any).lng}
         labelText={d => (d as any).name}
@@ -323,26 +269,27 @@ export default function InteractiveGlobe() {
         labelDotRadius={0.5}
         labelColor={() => 'rgba(255, 255, 255, 0.75)'}
         labelResolution={2}
-        
         atmosphereColor="rgba(0, 119, 182, 0.2)"
         atmosphereAltitude={0.15}
-        
         enablePointerInteraction={true}
       />
 
-      {!isInitialView && (
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          onClick={resetView}
-          className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-white/90 backdrop-blur-md p-2 sm:p-3 rounded-lg shadow-lg flex items-center gap-1 sm:gap-2 hover:bg-gray-50 transition-colors text-xs sm:text-sm z-10"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width={isMobile ? "16" : "20"} height={isMobile ? "16" : "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7M3 12v6h6M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6-2.3l-3-2.7M21 12v-6h-6"/>
-          </svg>
-          <span className="hidden sm:inline">Vue initiale</span>
-        </motion.button>
-      )}
+      <AnimatePresence>
+        {!isInitialView && (
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={resetView}
+            className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-white/90 backdrop-blur-md p-2 sm:p-3 rounded-lg shadow-lg flex items-center gap-1 sm:gap-2 hover:bg-gray-50 transition-colors text-xs sm:text-sm z-10"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width={isMobile ? "16" : "20"} height={isMobile ? "16" : "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7M3 12v6h6M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6-2.3l-3-2.7M21 12v-6h-6"/>
+            </svg>
+            <span className="hidden sm:inline">Vue initiale</span>
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {activeLocation && (
         <motion.div
