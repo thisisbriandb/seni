@@ -3,15 +3,14 @@ import PartnerDetail from '@/components/partners/PartnerDetail'
 import { getPartnerById } from '@/lib/partners'
 import { notFound } from 'next/navigation'
 
-type PageProps = {
-  params: {
-    id: string
-  }
+type Props = {
+  params: Promise<{ id: string }>
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const partner = await getPartnerById(params.id)
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const resolvedParams = await params
+  const partner = await getPartnerById(resolvedParams.id)
   
   if (!partner) {
     return {
@@ -25,8 +24,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function PartnerPage({ params }: PageProps) {
-  const partner = await getPartnerById(params.id)
+export default async function PartnerPage({ params }: Props) {
+  const resolvedParams = await params
+  const partner = await getPartnerById(resolvedParams.id)
 
   if (!partner) {
     notFound()
