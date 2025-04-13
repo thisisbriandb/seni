@@ -108,7 +108,7 @@ export default function PartnerDetail({ partner }: PartnerDetailProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
         <div className="relative aspect-video rounded-2xl overflow-hidden">
           <Image
-            src={partner.logo}
+            src={partner.image}
             alt={partner.name}
             fill
             className="object-cover"
