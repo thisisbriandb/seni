@@ -3,10 +3,11 @@ import PartnerDetail from '@/components/partners/PartnerDetail'
 import { getPartnerById } from '@/lib/partners'
 import { notFound } from 'next/navigation'
 
-interface PageProps {
+type PageProps = {
   params: {
     id: string
   }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
