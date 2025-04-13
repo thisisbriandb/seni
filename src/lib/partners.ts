@@ -7,6 +7,8 @@ const partners: Partner[] = [
     name: 'Polyclinique Internationale de Rabat',
     shortDesc: 'Structure hospitalière privée de référence au Maroc depuis 1996',
     logo: '/images/partners/polyclinique/principale.jpg',
+    image: '/images/partners/polyclinique/principale.jpg',
+    location: 'Rabat, Maroc',
     images: [
       '/images/partners/polyclinique/IMG-20250322-WA0001.jpg',
       '/images/partners/polyclinique/IMG-20250322-WA0002.jpg',
@@ -36,6 +38,8 @@ const partners: Partner[] = [
     name: 'Clinique d\'oncologie le Littoral',
     shortDesc: 'Centre spécialisé dans la prévention et le traitement du cancer',
     logo: '/images/partners/littoral/principale.webp',
+    image: '/images/partners/littoral/principale.webp',
+    location: 'Casablanca, Maroc',
     images: [
       '/images/partners/littoral/littoral.webp',
       '/images/partners/littoral/littoral2.webp',
@@ -60,6 +64,8 @@ const partners: Partner[] = [
     name: 'Hôpital Privé Pasteur',
     shortDesc: 'Hôpital privé multidisciplinaire à Hay Riad, Rabat',
     logo: '/images/partners/hopitalPasteur/pasteur.jpg',
+    image: '/images/partners/hopitalPasteur/pasteur.jpg',
+    location: 'Hay Riad, Rabat, Maroc',
     images: [
       '/images/partners/hopitalPasteur/IMG-20250322-WA0004.jpg'
     ],
