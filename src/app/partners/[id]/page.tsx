@@ -5,7 +5,6 @@ import { notFound } from 'next/navigation'
 
 type Props = {
   params: Promise<{ id: string }>
-  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
