@@ -11,6 +11,7 @@ const navItems = [
   { name: 'Accueil', path: '/' },
   { name: 'Services', path: '/services' },
   { name: 'Destinations', path: '/destinations' },
+  { name: 'Partenaires', path: '/partners' },
   { name: 'À Propos', path: '/about' }
 ];
 
@@ -29,11 +30,11 @@ export default function Header() {
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-sm py-4' : 'bg-transparent py-6'
-      }`}
-    >
-      <div className="container mx-auto px-4 lg:px-8">
+        }`}
+      >
+        <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+            {/* Logo */}
           <Link href="/" className="relative flex items-center">
             <Image
               src="/logo.png"
@@ -79,7 +80,7 @@ export default function Header() {
                     transition={{ duration: 0.3 }}
                   >
                     <Icon icon="ri:sun-fill" className="w-5 h-5 text-yellow-500" />
-                  </motion.div>
+              </motion.div>
                 ) : (
                   <motion.div
                     key="light"
@@ -101,20 +102,20 @@ export default function Header() {
             >
               <Icon icon="ri:team-line" className="w-5 h-5 group-hover:scale-110 transition-transform" />
               <span>Nous rejoindre</span>
-            </Link>
+                </Link>
 
             <Link 
               href="/contact"
               className="px-5 py-2 bg-[#0D7490] dark:bg-[#3CC7EE] text-white text-sm rounded-full hover:bg-[#0D7490]/90 dark:hover:bg-[#3CC7EE]/90 transition-all"
             >
-              Contact
-            </Link>
-          </div>
+                    Contact
+              </Link>
+            </div>
 
-          {/* Menu mobile */}
+            {/* Menu mobile */}
           <button
             className="md:hidden p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Menu"
           >
             <div className="w-6 h-5 flex flex-col justify-between">
@@ -150,8 +151,8 @@ export default function Header() {
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-gray-600 dark:text-gray-300 hover:text-[#0D7490] dark:hover:text-[#3CC7EE] py-2 transition-colors"
                   >
-                    {item.name}
-                  </Link>
+                        {item.name}
+                    </Link>
                 ))}
                 <div className="pt-4 flex flex-col gap-4">
                   {/* Theme Toggle Mobile */}
@@ -186,7 +187,7 @@ export default function Header() {
                   >
                     Contact
                   </Link>
-                </div>
+              </div>
               </nav>
             </div>
           </motion.div>

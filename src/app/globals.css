@@ -574,7 +574,7 @@ html {
 }
 
 /* Empêche les barres de défilement sur tous les conteneurs principaux */
-#__next, main, section, div {
+#__next, section, div {
   overflow: hidden;
 }
 
@@ -594,6 +594,7 @@ main {
   transform-origin: center center;
   backface-visibility: hidden;
   perspective: 1000px;
+  min-height: calc(100vh - 4rem); /* Assure une hauteur minimale */
 }
 
 /* Sections - sans overflow-y visible */
@@ -615,8 +616,9 @@ footer {
   position: relative;
   width: 100%;
   display: block;
-  margin-top: auto; /* Pousse le footer vers le bas */
-  background: linear-gradient(to bottom, var(--primary-dark), var(--primary-darker)); /* Assure que le footer a toujours une couleur de fond */
+  margin-top: auto;
+  padding: 2rem 0;
+  background: linear-gradient(to bottom, var(--primary-dark), var(--primary-darker));
 }
 
 /* Section héro */
@@ -634,7 +636,19 @@ footer {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 4rem;
+  }
 }
 
 /* Textes avec dégradés */

@@ -7,48 +7,37 @@ import Link from 'next/link';
 
 const partners = [
   {
-    id: 1,
-    name: "Hopital International de Casablanca",
+    id: 'polyclinique',
+    name: "Polyclinique Internationale de Rabat",
     location: "Rabat, Maroc",
-    image: "/images/partners/casablanca.jpeg",
-    specialties: ["Cardiologie", "Neurologie", "Oncologie"],
-    rating: 4.8,
-    reviews: 124,
-    description: "Centre médical de pointe offrant des soins spécialisés avec des équipements de dernière génération.",
-    link: "/partners/casablanca"
-  },
-  {
-    id: 2,
-    name: "Hôpital Américain de Paris",
-    location: "Paris, France",
-    image: "/images/partners/hopital-americain.jpg",
-    specialties: ["Chirurgie", "Radiologie", "Pédiatrie"],
+    image: "/images/partners/polyclinique/principale.jpg",
+    specialties: ["Cardiologie", "Neurologie", "Chirurgie"],
     rating: 4.9,
     reviews: 156,
-    description: "Institution médicale renommée combinant expertise française et standards américains.",
-    link: "/partners/hopital-americain"
+    description: "Structure hospitalière privée de référence au Maroc depuis 1996, certifiée ISO 9001.",
+    link: "/partners/polyclinique"
   },
   {
-    id: 3,
-    name: "Clinique La Soukra",
-    location: "Tunis, Tunisie",
-    image: "/images/partners/clinique-soukra.jpg",
-    specialties: ["Orthopédie", "Ophtalmologie", "Urologie"],
+    id: 'littoral',
+    name: "Clinique d'oncologie le Littoral",
+    location: "Casablanca, Maroc",
+    image: "/images/partners/littoral/principale.webp",
+    specialties: ["Oncologie", "Radiothérapie", "Chimiothérapie"],
+    rating: 4.8,
+    reviews: 132,
+    description: "Centre spécialisé dans la prévention et le traitement du cancer avec présence dans 5 villes.",
+    link: "/partners/littoral"
+  },
+  {
+    id: 'pasteur',
+    name: "Hôpital Privé Pasteur",
+    location: "Rabat, Maroc",
+    image: "/images/partners/hopitalPasteur/pasteur.jpg",
+    specialties: ["Cardiologie", "Traumatologie", "Urgences"],
     rating: 4.7,
     reviews: 98,
-    description: "Établissement médical moderne spécialisé dans les interventions chirurgicales de pointe.",
-    link: "/partners/clinique-soukra"
-  },
-  {
-    id: 4,
-    name: "Hôpital Principal de Dakar",
-    location: "Dakar, Sénégal",
-    image: "/images/partners/hopital-dakar.jpg",
-    specialties: ["Traumatologie", "Gynécologie", "Cardiologie"],
-    rating: 4.6,
-    reviews: 87,
-    description: "Centre hospitalier de référence en Afrique de l'Ouest avec une expertise reconnue.",
-    link: "/partners/hopital-dakar"
+    description: "Hôpital privé multidisciplinaire offrant des services médicaux de pointe 24H/24.",
+    link: "/partners/pasteur"
   }
 ];
 
@@ -68,7 +57,7 @@ export default function PartnersSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {partners.map((partner) => (
             <motion.div
               key={partner.id}
@@ -84,6 +73,7 @@ export default function PartnersSection() {
                   fill
                   className="object-cover rounded-t-xl"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-t-xl" />
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">

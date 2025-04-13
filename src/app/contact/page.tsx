@@ -233,13 +233,13 @@ export default function ContactPage() {
                         <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-primary/10 rounded-full">
                           <Icon icon="ri:phone-fill" className="text-lg sm:text-xl text-primary" />
                         </div>
-                        <span className="text-xs sm:text-sm text-text-secondary">{WHATSAPP_NUMBER}</span>
+                        <span className="text-xs sm:text-sm text-text-secondary">+212 07 78 79 83 86 / +236 76 07 11 46</span>
                       </div>
                       <div className="flex items-center gap-2 sm:gap-3">
                         <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-primary/10 rounded-full">
                           <Icon icon="ri:mail-fill" className="text-lg sm:text-xl text-primary" />
                         </div>
-                        <span className="text-xs sm:text-sm text-text-secondary">contactsenimaroc@gmail.com</span>
+                        <span className="text-xs sm:text-sm text-text-secondary">contact@seni.ma</span>
                       </div>
                     </div>
                   </div>

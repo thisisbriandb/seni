@@ -135,28 +135,28 @@ export default function DestinationsPage() {
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {destinations.map((destination, index) => (
-              <motion.div
-                key={destination.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {destinations.map((destination, index) => (
+            <motion.div
+              key={destination.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
-              >
+            >
                 <div className="relative h-56">
-                  <Image
-                    src={destination.image}
-                    alt={destination.name}
-                    fill
-                    className="object-cover"
-                  />
+                <Image
+                  src={destination.image}
+                  alt={destination.name}
+                  fill
+                  className="object-cover"
+                />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <h3 className="absolute bottom-4 left-6 text-2xl font-semibold text-white">
                     {destination.name}
                   </h3>
-                </div>
-                <div className="p-6">
+              </div>
+              <div className="p-6">
                   <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-3">
                     {destination.description}
                   </p>
@@ -166,7 +166,7 @@ export default function DestinationsPage() {
                     <div className="flex flex-wrap gap-2">
                       {destination.specialties.slice(0, 3).map((specialty, idx) => (
                         <span
-                          key={idx}
+                      key={idx}
                           className="inline-flex items-center px-4 py-1.5 rounded-full text-sm bg-[#0D7490]/5 dark:bg-[#3CC7EE]/10 text-[#0D7490] dark:text-[#3CC7EE] font-medium"
                         >
                           {specialty}
@@ -217,10 +217,10 @@ export default function DestinationsPage() {
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-300">
                   {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
         </div>
       </section>
 
@@ -239,8 +239,8 @@ export default function DestinationsPage() {
                 Contactez-nous
               </button>
             </Link>
-          </div>
-        </div>
+      </div>
+    </div>
       </section>
     </main>
   );

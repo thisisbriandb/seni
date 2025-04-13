@@ -43,29 +43,29 @@ const socialLinks = [
 
 const contactInfo = [
   { icon: "ri:map-pin-fill", text: 'Bangui, République Centrafricaine' },
-  { icon: "ri:phone-fill", text: '+212 07 78 79 83 86' },
-  { icon: "ri:mail-fill", text: 'contactsenimaroc@gmail.com' },
+  { icon: "ri:phone-fill", text: '+212 07 78 79 83 86 / +236 76 07 11 46' },
+  { icon: "ri:mail-fill", text: 'contact@seni.ma' },
 ];
 
 export default function Footer() {
   return (
-    <footer className="w-full pt-16 pb-8 relative text-white bg-gradient-to-b from-[#0D7490] to-[#083F4D] overflow-hidden mt-auto">
+    <footer className="w-full pt-12 md:pt-16 pb-6 md:pb-8 relative text-white bg-gradient-to-b from-[#0D7490] to-[#083F4D] overflow-hidden mt-auto">
       {/* Motif de fond animé */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[url('/images/pattern-dark.svg')] opacity-5" />
       </div>
 
-      <div className="container mx-auto px-6 md:px-8 lg:px-12 relative">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-16 mb-16">
+      <div className="container mx-auto px-6 sm:px-8 md:px-10 lg:px-12 relative">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 md:gap-12 lg:gap-16 mb-12 md:mb-16">
           {/* Logo and description */}
-          <div className="space-y-8 lg:col-span-2">
+          <div className="space-y-6 md:space-y-8 lg:col-span-2">
             <Link href="/" className="inline-block">
               <Image 
                 src="/logo.png"
                 alt="SENI" 
                 width={120} 
                 height={40}
-                className="h-10 w-auto brightness-0 invert"
+                className="h-8 md:h-10 w-auto brightness-0 invert"
               />
             </Link>
             <div className="text-white/80 text-base leading-relaxed max-w-sm">
@@ -90,7 +90,7 @@ export default function Footer() {
           
           {/* Links sections */}
           {footerLinks.map((section, index) => (
-            <div key={index} className="space-y-6">
+            <div key={index} className="space-y-5 md:space-y-6">
               <h3 className="font-semibold text-lg relative">
                 {section.title}
                 <div className="absolute -bottom-2 left-0 h-0.5 w-12 bg-white/30" />
@@ -114,7 +114,7 @@ export default function Footer() {
         <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-8" />
         
         {/* Footer bottom */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 px-4">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 px-6">
           <div className="text-base text-white/60 text-center md:text-left">
             © {new Date().getFullYear()} SENI. Tous droits réservés.
           </div>
