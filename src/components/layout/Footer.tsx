@@ -113,7 +113,7 @@ export default function Footer() {
         {/* Separator */}
         <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-8" />
         
-        {/* Footer bottom */}
+              {/* Footer bottom */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 px-6">
           <div className="text-base text-white/60 text-center md:text-left">
             © {new Date().getFullYear()} SENI. Tous droits réservés.
@@ -135,6 +135,19 @@ export default function Footer() {
               </a>
             ))}
           </div>
+        </div>
+
+        {/* Signature */}
+        <div className="mt-6 text-center text-sm text-white/50">
+          Conçu et développé par{' '}
+          <a
+            href="https://briandb.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-white"
+          >
+            Briand Bataillon
+          </a>
         </div>
       </div>
     </footer>
